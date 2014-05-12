@@ -52,7 +52,7 @@ class Image(models.Model):
         generates an *input* html tag with type=image for html rendering
         '''
         return '<input type=image name=icon src=%s>' % self.get_file_url()
-    
+
     def __unicode__(self):
         return str(self.file)
 
@@ -64,7 +64,7 @@ class Icon(models.Model):
     admin panel.
     '''
     category = models.CharField(max_length=20, null=True, blank=True)
-    url = models.URLField(verify_exists=False)
+    url = models.URLField()
     
     @allow_tags
     def graphic(self):

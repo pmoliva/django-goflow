@@ -70,12 +70,10 @@ class UserProfileAdmin(admin.ModelAdmin):
 admin.site.register(UserProfile, UserProfileAdmin)
 
 
-admin.site.unregister(User)
+
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
     max_num = 1
 
 
-class GoFlowUserAdmin(UserAdmin):
-    inlines = [UserProfileInline]
-admin.site.register(User, GoFlowUserAdmin)
+

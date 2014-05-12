@@ -37,7 +37,7 @@ class Activity(models.Model):
                                 help_text="parameters dictionary; example: {'username':'john'}")
     application = models.ForeignKey('Application', related_name='activities', null=True, blank=True,
                                 help_text='leave it blank for prototyping the process without coding')
-    app_param = models.CharField(max_length=100, verbose_name='parameters', 
+    app_param = models.CharField(max_length=300, verbose_name='parameters', 
                                  help_text='parameters dictionary', null=True, blank=True)
     subflow = models.ForeignKey('Process', related_name='parent_activities', null=True, blank=True)
     roles = models.ManyToManyField(Group, related_name='activities', null=True, blank=True)
@@ -229,8 +229,7 @@ class Application(models.Model):
             else:
                 path = '%s?workitem_id=%d' % (path, workitem.id) 
         if extern_for_user:
-            profile = UserProfile.objects.get(user=user)
-            path = 'http://%s%s' % (profile.web_host, path)
+            path = 'http://%s%s' % (extern_for_user.get_profile().web_host, path)
         return path
     
     def get_handler(self):
@@ -395,6 +394,12 @@ class Transition(models.Model):
 
 class UserProfile(models.Model):
     """Contains workflow-specific user data.
+    
+    It has to be declared as auth profile module as following:
+    settings.AUTH_PROFILE_MODULE = 'workflow.userprofile'
+    
+    If your application have its own profile module, you must
+    add to it the workflow.UserProfile fields.
     """
     user = models.ForeignKey(User, unique=True)
     web_host = models.CharField(max_length=100, default='localhost:8000')

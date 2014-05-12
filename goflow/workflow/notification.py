@@ -11,8 +11,7 @@ def send_mail(workitems=None, user=None, subject='message', template='mail.txt')
         pass
     t = Template(subject)
     subject = t.render(Context({'workitems': workitems,'user':user}))
-    from goflow.workflow.models import UserProfile
-    profile = UserProfile.objects.get(user=user) 
+    profile = user.get_profile()
     message = render_to_string(template, {
                                           'workitems': workitems,
                                           'user':user,

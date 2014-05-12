@@ -1,12 +1,12 @@
 {% extends "goflow/base_site.html" %}
-{% load i18n admin_modify adminmedia %}
+{% load i18n admin_modify  static %}
 
 {% block extrahead %}{{ block.super }}
 <script type="text/javascript" src="/admin/jsi18n/"></script>
-<script type="text/javascript" src="{% admin_media_prefix %}js/core.js"></script>
-<script type="text/javascript" src="{% admin_media_prefix %}js/admin/RelatedObjectLookups.js"></script>
-<script type="text/javascript" src="{% admin_media_prefix %}js/calendar.js"></script>
-<script type="text/javascript" src="{% admin_media_prefix %}js/admin/DateTimeShortcuts.js"></script>
+<script type="text/javascript" src="{% static 'admin' %}js/core.js"></script>
+<script type="text/javascript" src="{% static 'admin' %}js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="{% static 'admin' %}js/calendar.js"></script>
+<script type="text/javascript" src="{% static 'admin' %}js/admin/DateTimeShortcuts.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -44,6 +44,7 @@
 		{% else %}
 		<form method="post">
 		{% endif %}
+        {% csrf_token %}
 			
 			{% load apptools_lib %}
 			{% form_ext form %}

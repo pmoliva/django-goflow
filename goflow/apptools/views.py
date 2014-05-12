@@ -17,7 +17,7 @@ from django.forms.models import modelform_factory
 from django.contrib.auth.decorators import permission_required
 
 from django.contrib.auth.decorators import login_required
-from models import DefaultAppModel, Icon, Image, ImageButton
+from models import DefaultAppModel, Icon, ImageButton
 from forms import DefaultAppForm
 
 from django.conf import settings
@@ -447,22 +447,6 @@ def test_start(request, id, template='goflow/test_start.html'):
     return render_to_response(template, context)
 
 
-@login_required
-def image_update(request):
-    '''
-    Import Image instances as Icon instances.
-    
-    GoFlow can use local images as well as http distant images.
-    For a genericity reason, local images (Image) are obtained as
-    Icon images by their url; this view is useful to wrap all local
-    images in a row. 
-    '''
-    rep = '<h1>Update Icons from Images</h1>'
-    for im in Image.objects.all():
-        if Icon.objects.filter(url__endswith=str(im.url)).count() == 0:
-            ic, created = Icon.objects.get_or_create(category='local-'+im.category, url=im.url())
-            if created: rep += '<br> %s added ' % im.url()
-    rep += '<hr><p><b><a href=../>return</a></b>'
-    return HttpResponse(rep)
+
     
     
