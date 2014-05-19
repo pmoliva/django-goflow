@@ -116,6 +116,8 @@ class Process(models.Model):
     forward from activity to activity, going through transitions,
     until they reach the End activity.
     """
+    DEFAULT_PRIORITY = 0
+
     enabled = models.BooleanField(default=True)
     date = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=100)
@@ -124,7 +126,7 @@ class Process(models.Model):
     begin = models.ForeignKey('Activity', related_name='bprocess', verbose_name='initial activity', null=True, blank=True)
     end = models.ForeignKey('Activity', related_name='eprocess', verbose_name='final activity', null=True, blank=True,
                             help_text='a default end activity will be created if blank')
-    priority = models.IntegerField(default=0)
+    priority = models.IntegerField(default=DEFAULT_PRIORITY)
         
     # add new ProcessManager
     objects = ProcessManager()

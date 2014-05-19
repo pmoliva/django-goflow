@@ -14,10 +14,10 @@ def log(section, variable):
 # ------------------------------------------------------------------------------------
 class ProcessBuilder(object):
     def __init__(self, title='', description='', enabled=True, priority=0,
-            start_activity='begin', end_activity='end'):
+            start_activity='begin', end_activity=None):
         self.process = self.create_process(title=title, description=description, 
                                            enabled=enabled, priority=priority)
-        self.process_role = self.create_process_role()
+        #self.process_role = self.create_process_role()
         self.start_activity = start_activity
         self.end_activity = end_activity
         self.users = {}
@@ -64,19 +64,19 @@ class ProcessBuilder(object):
         activity.save()
         self.activities[title] = activity
         return activity
-        
+
     def add_activities(self, activities):
         _activities = []
         for title, kind, pushapp, app, autostart, autofinish, join, split, roles in activities:    
             _activities.append(self.add_activity(
                 title=title, kind=kind, push_application=self.add_pushapp(pushapp), 
-                application=self.add_application(url=self.applications[app]['url']), 
-                app_param=self.applications[app]['parameters'], 
+                application=self.add_application(url=self.applications[app]['url']) if app else None, 
+                app_param=self.applications[app]['parameters'] if app else None, 
                 autostart=autostart, autofinish=autofinish, 
                 join_mode=join, split_mode=split, roles=roles
             ))
         return _activities
-    
+
     def add_transition(self, input_output=(None, None), name='', condition=''):
         input=self.activities[input_output[0]] 
         output=self.activities[input_output[1]]
@@ -100,7 +100,7 @@ class ProcessBuilder(object):
         log('process', process)
         process.begin = begin
         process.end = end
-        process.save()
+        process.save(no_end=True)
         return process
 
     def create_process_role(self):

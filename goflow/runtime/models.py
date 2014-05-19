@@ -407,7 +407,7 @@ class WorkItem(models.Model):
         '''
         Passes the process instance embedded in the given workitem 
         to a new workitem that is associated with the destination activity.
-        
+
         @type target_activity: Activity
         @param target_activity: the activity instance to which the workitem 
                                 should be forwarded
@@ -436,7 +436,7 @@ class WorkItem(models.Model):
                 if created:
                     # first worktem: block it
                     wi.block()
-                    return    
+                    return
                 else:
                     wi.others_workitems_from.add(self)
                     if wi.others_workitems_from.all().count() + 1 < nb_input_transitions:

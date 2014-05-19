@@ -70,7 +70,6 @@ def start_application(request, app_label=None, model_name=None, process_name=Non
         submit_value = request.POST[submit_name]
         if submit_value == cancel_value:
             return HttpResponseRedirect(redirect)
-        
         if submit_value == ok_value and form.is_valid():
             try:
                 if is_form_used:
@@ -85,7 +84,7 @@ def start_application(request, app_label=None, model_name=None, process_name=Non
                     log.error("forme save error: %s", str(v))
             
             if ob:
-                priority = int(form.cleaned_data['priority'])
+                priority = int(form.cleaned_data.get('priority', Process.DEFAULT_PRIORITY))
                 ProcessInstance.objects.start(process_name, request.user, ob, instance_label, priority=priority)
             
             return HttpResponseRedirect(redirect)
@@ -166,7 +165,7 @@ def _cond_to_button_value(cond):
 
 @login_required
 def edit_model(request, id, form_class, cmp_attr=None,template=None, template_def='goflow/edit_model.html', title="",
-               redirect='home', submit_name='action', ok_values=('OK',), save_value=None, cancel_value='Cancel',
+               redirect='home', submit_name='action', ok_values=('OK',), save_value='Save', cancel_value='Cancel',
                extra_context={}):
     '''
     generic handler for editing a model.
@@ -231,7 +230,6 @@ def edit_model(request, id, form_class, cmp_attr=None,template=None, template_de
                 except Exception, v:
                     raise Exception(str(v))
                 return HttpResponseRedirect(redirect)
-            
             if submit_value in ok_values:
                 # save and complete activity
                 #ob = form.save()
@@ -445,8 +443,3 @@ def test_start(request, id, template='goflow/test_start.html'):
     form = ContentTypeForm()
     context['form'] = form
     return render_to_response(template, context)
-
-
-
-    
-    
